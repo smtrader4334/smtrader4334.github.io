@@ -301,8 +301,8 @@ footer{background:#0D0B22;padding:24px 18px;text-align:center;color:#5A6E80;font
 <!-- TAB - 버튼형 -->
 <div class="tab-wrap">
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab(this,'fire')">🔥 화재 등 대형사고</button>
-    <button class="tab-btn" onclick="switchTab(this,'leak')">💧 누수 등 소액사고</button>
+    <button class="tab-btn active" data-tab="fire">🔥 화재 등 대형사고</button>
+    <button class="tab-btn" data-tab="leak">💧 누수 등 소액사고</button>
   </div>
 </div>
 
@@ -497,14 +497,27 @@ footer{background:#0D0B22;padding:24px 18px;text-align:center;color:#5A6E80;font
 </footer>
 
 <script>
-function switchTab(btn, type) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
-  btn.classList.add('active');
-  var panel = document.getElementById('tab-' + type);
-  panel.classList.add('active');
-  panel.style.display='block';
-}
+document.addEventListener('DOMContentLoaded', function() {
+  var btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var type = this.getAttribute('data-tab');
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p) {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      this.classList.add('active');
+      var panel = document.getElementById('tab-' + type);
+      panel.classList.add('active');
+      panel.style.display = 'block';
+    });
+  });
+  // 초기 상태
+  document.getElementById('tab-fire').style.display = 'block';
+  document.getElementById('tab-leak').style.display = 'none';
+});
 
 function saveContact() {
   const vcard = [
